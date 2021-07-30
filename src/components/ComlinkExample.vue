@@ -21,17 +21,9 @@
 </template>
 
 <script>
-import * as Comlink from "comlink";
-
-const Mulptiplier = Comlink.wrap(
-  new Worker("@/comlinkWorker/mulptiplierWorker.js", {type: 'module'})
-);
-
-const worker2 = new SharedWorker("@/comlinkWorker/mulptiplierWorker.js");
-console.log(`worker2.port => ${worker2.port}`);
-const MultiplierShared = Comlink.wrap(worker2.port);
 
 export default {
+  inject: ['MultiplierShared', 'Mulptiplier'],
   data() {
     return {
       multiplicationResult: "No token yet",
@@ -40,14 +32,12 @@ export default {
       number2: 4
     }
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     async getMultiplication() {
       try {
         console.log("Mulptiplier.getMultiplication");
-        var result = await Mulptiplier.getMultiplication(this.number1, this.number2);
+        var result = await this.Mulptiplier.getMultiplication(this.number1, this.number2);
       } catch (err) {
         this.multiplicationResult = err;
       }
@@ -56,8 +46,8 @@ export default {
 
     async getMultiplicationShared() {
       try {
-        console.log("Mulptiplier.getMultiplication");
-        var result = await MultiplierShared.getMultiplication(this.number1, this.number2);
+        console.log("MultiplierShared.getMultiplication");
+        var result = await this.MultiplierShared.getMultiplication(this.number1, this.number2);
       } catch (err) {
         this.multiplicationResult = err;
       }
