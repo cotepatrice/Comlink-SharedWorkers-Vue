@@ -27,9 +27,9 @@ const Mulptiplier = Comlink.wrap(
   new Worker("@/comlinkWorker/mulptiplierWorker.js", {type: 'module'})
 );
 
-const MultiplierShared = Comlink.wrap(
-  new SharedWorker("@/comlinkWorker/mulptiplierWorker.js").port
-);
+const worker2 = new SharedWorker("@/comlinkWorker/mulptiplierWorker.js");
+console.log(`worker2.port => ${worker2.port}`);
+const MultiplierShared = Comlink.wrap(worker2.port);
 
 export default {
   data() {
